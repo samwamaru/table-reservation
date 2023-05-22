@@ -7,7 +7,7 @@ import * as reservationcontroller from "../controllers/tableReservation.js"
 
 //POST methods
 router.route("/register").post(controller.register)
-router.route("/registerMail").post()
+
 router.route("/authenticate").post()
 router.route("/login").post(controller.login)
 router.route("/reservations").post(reservationcontroller.createReservation)
