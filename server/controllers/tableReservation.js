@@ -9,10 +9,58 @@ export const getAllReservations = async (req, res) => {
   };
   
   // Create a new reservation
-  export const createReservation = async (req, res) => {
-    res.json("createReservation route");
-  };
   
+ 
+
+
+  import ReservationModel from "../models/Reservation.model.js";
+import UserModel from "../models/User.model.js";
+
+export async function createReservation(req, res) {
+  try {
+    const { date, time, numberOfGuests, specialRequests, duration,username } = req.body;
+   
+
+    // Find user by username
+    // Find user by username
+    const user = await UserModel.findOne({ username });
+    if (!user) {
+      return res.status(401).send({ error: "Invalid username or password" });
+    }
+
+
+    // Create reservation
+    const reservation = new ReservationModel({
+      user: user._id,
+      date,
+      time,
+      numberOfGuests,
+      specialRequests,
+      duration,
+    });
+
+    // Save reservation to the database
+    await reservation.save();
+
+    const userDetails = {
+      username: user.username,
+      email: user.email,
+      mobile: user.mobile,
+    };
+
+    return res.status(201).send({
+      message: "Reservation created successfully",
+      reservation,
+      user: userDetails
+    
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+}
+
+
   // Update an existing reservation
   export const updateReservation = async (req, res) => {
     res.json("updateReservation route");

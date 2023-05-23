@@ -10,7 +10,7 @@ router.route("/register").post(controller.register)
 
 router.route("/authenticate").post()
 router.route("/login").post(controller.verifyUser, controller.login)
-router.route("/reservations").post(reservationcontroller.createReservation)
+router.route("/reservations").post(controller.verifyUser,reservationcontroller.createReservation)
 
 //get methods
 router.route("/user:username").get(controller.getUser)

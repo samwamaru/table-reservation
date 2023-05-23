@@ -84,7 +84,12 @@ export async function login(req, res) {
       expiresIn: "1h",
     });
 
-    return res.status(200).send({ token });
+    return res.status(200).send({
+      token,
+      message: "Logged in successfully",
+      username: user.username,
+      
+      });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Internal server error" });
