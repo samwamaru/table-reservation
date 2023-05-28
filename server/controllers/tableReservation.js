@@ -1,3 +1,76 @@
+
+
+import ReservationModel from "../models/Reservation.model.js";
+import UserModel from "../models/User.model.js";
+import TableModel from "../models/Table.model.js";
+//create table 
+
+export async function createTable(req, res) {
+  try {
+    const { tableNumber, capacity } = req.body;
+
+    const table = new TableModel({
+      tableNumber,
+      capacity,
+    });
+
+    await table.save();
+
+    return res.status(201).send({
+      message: 'Table created successfully',
+      table,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: 'Internal server error' });
+  }
+}
+
+
+// Table Assigning Controller
+export const assignTable = async (req, res) => {
+  const { reservationId, tableId } = req.body;
+
+  try {
+    // Validate reservationId and tableId
+    // Check if the reservation and table exist in the system
+
+    // Fetch the reservation and table records
+    const reservation = await ReservationModel.findById(reservationId);
+    // Assuming you have a Table model, fetch the table record as well
+    const table = await TableModel.findById(tableId);
+
+    if (!reservation) {
+      return res.status(404).json({ error: "Reservation not found" });
+    }
+
+    // Check if the table is available
+    if (!table || !table.isAvailable) {
+      return res.status(400).json({ error: "Table is not available" });
+    }
+
+    // Update reservation record with assigned table information
+    reservation.assignedTable = tableId;
+    reservation.status = "confirmed";
+    reservation.assigner = req.user._id; // Assuming you have authentication and can access the user performing the assignment
+    reservation.assignedAt = new Date();
+
+    // Save the updated reservation
+    await reservation.save();
+
+    // Update the table availability status
+    table.isAvailable = false;
+    await table.save();
+
+    return res.json({ message: "Table assigned successfully", reservation });
+  } catch (error) {
+    console.error("Error assigning table:", error);
+    return res.status(500).json({ error: "Failed to assign table" });
+  }
+};
+
+
+
 // Get all reservations
 export const getAllReservations = async (req, res) => {
     res.json("getAllReservations route");
@@ -12,82 +85,66 @@ export const getAllReservations = async (req, res) => {
   
  
 
-
-  import ReservationModel from "../models/Reservation.model.js";
-import UserModel from "../models/User.model.js";
-
-// export async function createReservation(req, res) {
-//   try {
-//     const { date, time, numberOfGuests, specialRequests, duration,username } = req.body;
-   
-
-//     // Find user by username
-//     // Find user by username
-//     const user = await UserModel.findOne({ username });
-//     if (!user) {
-//       return res.status(401).send({ error: "Invalid username or password" });
-//     }
-
-
-//     // Create reservation
-//     const reservation = new ReservationModel({
-//       user: user._id,
-//       date,
-//       time,
-//       numberOfGuests,
-//       specialRequests,
-//       duration,
-//     });
-
-//     // Save reservation to the database
-//     await reservation.save();
-
-//     const userDetails = {
-//       username: user.username,
-//       email: user.email,
-//       mobile: user.mobile,
-//     };
-
-//     return res.status(201).send({
-//       message: "Reservation created successfully",
-//       reservation,
-//       user: userDetails
-    
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).send({ error: "Internal server error" });
-//   }
-// }
+  export async function createReservation(req, res) {
+    try {
+      const { date, time, numberOfGuests, specialRequests, duration } = req.body;
+  
+      // Access the user object from the decoded token
+      const userId = req.user.userId;
+      const user = await UserModel.findById(userId);
+  
+      // Create reservation
+      const reservation = new ReservationModel({
+        user: userId,
+        date,
+        time,
+        numberOfGuests,
+        specialRequests,
+        duration,
+      });
+  
+      // Save reservation to the database
+      await reservation.save();
+  
+      return res.status(201).send({
+        message: "Reservation created successfully",
+        reservation,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ error: "Internal server error" });
+    }
+  }
+  
 
 
   // Update an existing reservation
   export const updateReservation = async (req, res) => {
-    res.json("updateReservation route");
+    res.json("");
   };
   
   // Delete a reservation
   export const deleteReservation = async (req, res) => {
-    res.json("deleteReservation route");
+    res.json("");
   };
   
   // Get availability of tables for a specific date and time
   export const getTableAvailability = async (req, res) => {
-    res.json("getTableAvailability route");
+    res.json("");
   };
   
   // Get guest details by ID
   export const getGuestDetails = async (req, res) => {
-    res.json("getGuestDetails route");
+    res.json("");
   };
   
   // Get all reservations for a specific guest
   export const getGuestReservations = async (req, res) => {
-    res.json("getGuestReservations route");
+    res.json("");
   };
   
   // Get a report of all reservations
   export const getReservationReport = async (req, res) => {
-    res.json("getReservationReport route");
+    res.json("");
   };
   

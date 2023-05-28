@@ -13,11 +13,7 @@ const TableSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Restaurant", // If you decide to include the Restaurant model in the future
-    required: true,
-  },
+  
 });
 
 export default mongoose.model("Table", TableSchema);

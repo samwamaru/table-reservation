@@ -1,29 +1,48 @@
 import UserModel from "../models/User.model.js";
+import dotenv from 'dotenv';
+
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 
+dotenv.config();
 
-export async function verifyUser(req, res, next) {
+
+export function verifyUser(req, res, next) {
+  const token = req.headers.authorization
+
+  if (!token) {
+    return res.status(401).send({ error: 'Unauthorized: No token provided' });
+  }
+
   try {
-    const { identifier } = req.method === "GET" ? req.query : req.body;
-    console.log("Identifier:", identifier);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Check the user existence
-    const existingUser = await UserModel.findOne({
-      $or: [{ mobile: identifier }, { email: identifier }],
-    });
-    console.log("User:", existingUser);
-    if (!existingUser) {
-      return res.status(404).send({ error: "Can't find User!" });
+    // Attach the decoded user information to the request object
+    req.user = decoded;
+  
+    next();
+  } catch (error) {
+    return res.status(401).send({ error: 'Unauthorized: Invalid token' });
+  }
+}
+export async function verifyAdmin(req, res, next) {
+  const userId = req.user.userId;
+
+  try {
+    const user = await UserModel.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(401).send({ error: 'Unauthorized: User not found' });
     }
-    
-    // Store the user object in the request for later use
-    req.user = existingUser;
+
+    if (user.role !== 'admin') {
+      return res.status(403).send({ error: 'Forbidden: Access denied' });
+    }
 
     next();
   } catch (error) {
     console.error(error);
-    return res.status(500).send({ error: "Authentication Error" });
+    return res.status(500).send({ error: 'Internal server error' });
   }
 }
 
@@ -102,8 +121,8 @@ export async function register(req, res) {
       }
   
       // Generate JWT token
-      const token = jwt.sign({ userId: user._id }, "sjdhbhvbchbsabjabxjabxjb", {
-        expiresIn: "1h",
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "24h",
       });
   
       return res.status(200).send({

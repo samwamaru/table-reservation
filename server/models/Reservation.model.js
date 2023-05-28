@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const ReservationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -26,9 +25,19 @@ const ReservationSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["confirmed", "pending", "canceled"],
+    enum: ["confirmed", "pending", "canceled", "completed"],
     default: "pending",
   },
+  assignedTable: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Table",
+  },
+  assigner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  assignedAt: {
+    type: Date,
+  },
 });
-
-export default mongoose.model("Reservation", ReservationSchema);
+export default mongoose.model("Reservation",  ReservationSchema);

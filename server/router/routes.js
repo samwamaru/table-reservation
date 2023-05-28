@@ -7,10 +7,11 @@ import * as reservationcontroller from "../controllers/tableReservation.js"
 
 //POST methods
 router.route("/register").post(controller.register)
+router.route("/createtable").post(controller.verifyUser,controller.verifyAdmin, reservationcontroller.createTable)
 
 router.route("/authenticate").post()
-router.route("/login").post(controller.verifyUser, controller.login)
-// router.route("/reservations").post(controller.verifyUser,reservationcontroller.createReservation)
+router.route("/login").post(controller.login)
+router.route("/reservations").post(controller.verifyUser,reservationcontroller.createReservation)
 
 //get methods
 router.route("/user:username").get(controller.getUser)
@@ -30,6 +31,7 @@ router.route("/reservations/report").get(reservationcontroller.getReservationRep
 router.route("/updateUser").put(controller.updateUser)
 router.route("/resetPassword").put(controller.resetPassword)
 router.route('/reservations/:id').put(reservationcontroller.updateReservation)
+router.route('/assigntable').put(controller.verifyUser,controller.verifyAdmin, reservationcontroller.assignTable)
 
 //delete methods
 router.route('/reservations/:id').delete(reservationcontroller.deleteReservation)

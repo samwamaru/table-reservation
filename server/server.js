@@ -3,6 +3,11 @@ import cors from "cors"
 import morgan from "morgan"
 import connectDatabase from "./database/connect.js"
 import router from "./router/routes.js"
+import cron from 'node-cron';
+import { updateTableAvailability } from "./updateTableAvailability.js" 
+
+
+
 
 const app = express()
 
@@ -32,4 +37,6 @@ try {
   }
   
   
+  cron.schedule('* * * * *', updateTableAvailability);
+
 
