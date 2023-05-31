@@ -1,50 +1,11 @@
 import UserModel from "../models/User.model.js";
 import dotenv from 'dotenv';
-
+import otpGenerator from 'otp-generator';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-
-export function verifyUser(req, res, next) {
-  const token = req.headers.authorization
-
-  if (!token) {
-    return res.status(401).send({ error: 'Unauthorized: No token provided' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Attach the decoded user information to the request object
-    req.user = decoded;
-  
-    next();
-  } catch (error) {
-    return res.status(401).send({ error: 'Unauthorized: Invalid token' });
-  }
-}
-export async function verifyAdmin(req, res, next) {
-  const userId = req.user.userId;
-
-  try {
-    const user = await UserModel.findOne({ _id: userId });
-
-    if (!user) {
-      return res.status(401).send({ error: 'Unauthorized: User not found' });
-    }
-
-    if (user.role !== 'admin') {
-      return res.status(403).send({ error: 'Forbidden: Access denied' });
-    }
-
-    next();
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send({ error: 'Internal server error' });
-  }
-}
 
 
 
@@ -138,28 +99,125 @@ export async function register(req, res) {
   }
   
   // http://localhost:8080/api/user
-  export const getUser = async (req, res) => {
-    res.json("getUser route");
-  };
+
+  export async function getUser(req, res) {
+    try {
+      const userId = req.user.userId;
+  
+      const user = await UserModel.findById(userId).select('-password');
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      return res.json({ user });
+    } catch (error) {
+      console.error('Error retrieving user:', error);
+      return res.status(500).json({ error: 'Failed to retrieve user' });
+    }
+  }
+  
+  export const updateUser=  async(req, res)=> {
+    try {
+      const userId = req.user.userId;
+      const { firstName, lastName, email, mobile } = req.body;
+  
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Update user's information
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.email = email;
+      user.mobile = mobile;
+  
+      // Save the updated user
+      await user.save();
+  
+      return res.json({ message: 'User updated successfully', user });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return res.status(500).json({ error: 'Failed to update user' });
+    }
+  }
   
   // http://localhost:8080/api/generate-otp
+ 
+
   export const generateOTP = async (req, res) => {
-    res.json("generateOTP route");
+    try {
+      // Generate a six-character OTP
+      req.app.locals.OTP =  await otpGenerator.generate(6,{ lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
+  
+      return res.json({code:  req.app.locals.OTP});
+    } catch (error) {
+      console.error('Error generating OTP:', error);
+      return res.status(500).json({ error: 'Failed to generate OTP' });
+    }
   };
   
   // http://localhost:8080/api/verify-otp
-  export const verifyOTP = async (req, res) => {
-    res.json("verifyOTP route");
-  };
+export async function verifyOTP(req,res){
+    const { code } = req.query;
+    if(parseInt(req.app.locals.OTP) === parseInt(code)){
+        req.app.locals.OTP = null; // reset the OTP value
+        req.app.locals.resetSession = true; // start session for reset password
+        return res.status(201).send({ msg: 'Verify Successsfully!'})
+    }
+    return res.status(400).send({ error: "Invalid OTP"});
+}
   
   // http://localhost:8080/api/create-reset-session
-  export const createResetSession = async (req, res) => {
-    res.json("createResetSession route");
-  };
-  export const resetPassword = async (req, res) => {
-    res.json("resetPassword route");
-  };
-  export const updateUser = async (req, res) => {
-    res.json("updateUser route");
-  };
-  
+
+  export const createResetSession = async (req,res)=>{
+    if(req.app.locals.resetSession){
+         return res.status(201).send({ flag : req.app.locals.resetSession})
+    }
+    return res.status(440).send({error : "Session expired!"})
+ }
+ export async function resetPassword(req, res) {
+  try {
+      if (!req.app.locals.resetSession) {
+          return res.status(440).send({ error: "Session expired!" });
+      }
+
+      const { identifier, password } = req.body;
+
+      try {
+          UserModel.findOne({ $or: [{ mobile: identifier }, { email: identifier }] })
+              .then(user => {
+                  if (!user) {
+                      return res.status(404).send({ error: "Identifier not found" });
+                  }
+
+                  bcrypt.hash(password, 10)
+                      .then(hashedPassword => {
+                          UserModel.updateOne({ _id: user._id },
+                              { password: hashedPassword }
+                          )
+                              .then(() => {
+                                  req.app.locals.resetSession = false; // reset session
+                                  return res.status(201).send({ msg: "Record Updated...!" });
+                              })
+                              .catch(e => {
+                                  return res.status(500).send({ error: "Unable to update password" });
+                              });
+                      })
+                      .catch(e => {
+                          return res.status(500).send({ error: "Unable to hash password" });
+                      });
+              })
+              .catch(error => {
+                  return res.status(500).send({ error });
+              });
+      } catch (error) {
+          return res.status(500).send({ error });
+      }
+  } catch (error) {
+      return res.status(401).send({ error });
+  }
+}
