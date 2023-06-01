@@ -73,14 +73,46 @@ export const assignTable = async (req, res) => {
 
 
 // Get all reservations
+
+
 export const getAllReservations = async (req, res) => {
-    res.json("getAllReservations route");
-  };
-  
+  try {
+    const reservations = await ReservationModel.find();
+
+    return res.status(200).json({
+      message: 'All reservations retrieved successfully',
+      reservations,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
   // Get a specific reservation by ID
-  export const getReservationById = async (req, res) => {
-    res.json("getReservationById route");
-  };
+
+
+export const getReservationById = async (req, res) => {
+  try {
+    const { reservationId } = req.params;
+
+    const reservation = await ReservationModel.findById(reservationId);
+
+    if (!reservation) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+
+    // Here, you can add additional logic to check the user's authorization
+    // For example, you may want to check if the user requesting the reservation
+    // is the owner of the reservation or has admin privileges.
+
+    return res.status(200).json({ reservation });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
   
   // Create a new reservation
   
@@ -119,10 +151,40 @@ export const getAllReservations = async (req, res) => {
   
 
 
-  // Update an existing reservation
+ 
+
   export const updateReservation = async (req, res) => {
-    res.json("");
+    try {
+      const { reservationId } = req.params;
+      const { time, numberOfGuests, specialRequests, duration, date } = req.body;
+  
+      // Find the reservation by ID
+      const reservation = await ReservationModel.findById(reservationId);
+  
+      if (!reservation) {
+        return res.status(404).json({ error: 'Reservation not found' });
+      }
+  
+      // Update reservation details
+      reservation.time = time;
+      reservation.numberOfGuests = numberOfGuests;
+      reservation.specialRequests = specialRequests;
+      reservation.duration = duration;
+      reservation.date = date;
+  
+      // Save the updated reservation
+      await reservation.save();
+  
+      return res.status(200).json({
+        message: 'Reservation updated successfully',
+        reservation,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   };
+  
   
   // Delete a reservation
   export const deleteReservation = async (req, res) => {
@@ -130,9 +192,26 @@ export const getAllReservations = async (req, res) => {
   };
   
   // Get availability of tables for a specific date and time
+  
+
   export const getTableAvailability = async (req, res) => {
-    res.json("");
+    try {
+      // Fetch all tables from the database
+      const tables = await TableModel.find();
+  
+      // Filter tables based on availability
+      const availableTables = tables.filter(table => table.isAvailable);
+  
+      return res.status(200).json({
+        message: 'Table availability retrieved successfully',
+        availableTables,
+      });
+    } catch (error) {
+      console.error('Error retrieving table availability:', error);
+      return res.status(500).json({ error: 'Failed to retrieve table availability' });
+    }
   };
+  
   
   // Get guest details by ID
   export const getGuestDetails = async (req, res) => {
@@ -140,9 +219,26 @@ export const getAllReservations = async (req, res) => {
   };
   
   // Get all reservations for a specific guest
-  export const getGuestReservations = async (req, res) => {
-    res.json("");
-  };
+ 
+
+
+export const getCustomerReservations = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Retrieve reservations for the logged-in user
+    const reservations = await ReservationModel.find({ user: userId });
+
+    return res.status(200).json({
+      message: 'Customer reservations retrieved successfully',
+      reservations,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
   
   // Get a report of all reservations
   export const getReservationReport = async (req, res) => {

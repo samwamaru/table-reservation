@@ -22,11 +22,11 @@ router.route("/user").get( verifyUser, controller.getUser)
 router.route("/generateOTP").get(verifyUser,localVariables, controller.generateOTP)
 router.route("/verifyOTP").get( verifyUser, controller.verifyOTP)
 router.route("/createResetSession").get(controller.createResetSession)
-router.route('/reservations').get(reservationcontroller.getAllReservations)
+router.route('/allreservations').get(verifyUser,verifyAdmin,reservationcontroller.getAllReservations)
 router.route('/reservations/:id').get(reservationcontroller.getReservationById)
-router.route('/reservations/availability').get(reservationcontroller.getTableAvailability)
+router.route('/table-availability').get(verifyUser,verifyAdmin, reservationcontroller.getTableAvailability)
 router.route('/reservations/guest/:id').get(reservationcontroller.getGuestDetails)
-router.route('/reservations/guest/:id/reservations').get(reservationcontroller.getGuestReservations)
+router.route('/my-reservations').get( verifyUser, reservationcontroller.getCustomerReservations)
 router.route("/reservations/report").get(reservationcontroller.getReservationReport)
 
 
@@ -34,7 +34,7 @@ router.route("/reservations/report").get(reservationcontroller.getReservationRep
 //put methods
 router.route("/updateuser").put(verifyUser, controller.updateUser)
 router.route("/resetPassword").put( verifyUser, controller.resetPassword)
-router.route('/reservations/:id').put(reservationcontroller.updateReservation)
+router.route('/reservations/:reservationId').put(verifyUser, reservationcontroller.updateReservation)
 router.route('/assigntable').put(verifyUser,verifyAdmin, reservationcontroller.assignTable)
 
 //delete methods
