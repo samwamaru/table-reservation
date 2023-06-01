@@ -24,25 +24,25 @@ export const registerMail = (req, res) => {
         </style>
       </head>
       <body>
-        <h1>Your bill has arrived!</h1>
-        <p>Name: Daily Tuition</p>
+        <h1>Your reservation  request has been confirmed</h1>
+        <p>Name: Jesse bett</p>
         <table>
           <thead>
             <tr>
-              <th>Item</th>
-              <th>Description</th>
-              <th>Price</th>
+              <th>Table Number </th>
+              <th>Duration</th>
+              <th>time</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Nodemailer Stack Book</td>
-              <td>A Backend application</td>
-              <td>$10.99</td>
+              <td>Table 5</td>
+              <td>3 hours</td>
+              <td> 17:00-</td>
             </tr>
           </tbody>
         </table>
-        <p>Looking forward to doing more business</p>
+        <p>Enjoy you meals </p>
       </body>
     </html>
   `;
