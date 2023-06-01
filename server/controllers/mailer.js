@@ -1,61 +1,67 @@
 import nodemailer from 'nodemailer';
-import Mailgen from 'mailgen';
-import dotenv from "dotenv"
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
+export const registerMail = (req, res) => {
+  const { userEmail } = req.body;
 
-
-// Gmail configuration
-let transporter = nodemailer.createTransport({
+  let config = {
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL, // your Gmail email address
-        pass: process.env.PASSWORD // your Gmail password
-    }
-});
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  };
 
-let MailGenerator = new Mailgen({
-    theme: 'default',
-    product: {
-        name: 'Mailgen',
-        link: 'https://mailgen.js/'
-    }
-});
+  let transporter = nodemailer.createTransport(config);
 
-/** POST: http://localhost:8080/api/registerMail 
- * @param: {
- *   "username" : "example123",
- *   "userEmail" : "admin123",
- *   "text" : "",
- *   "subject" : "",
- * }
- */
-export const registerMail = async (req, res) => {
-    const { firstName, userEmail, text, subject } = req.body;
+  let emailContent = `
+    <html>
+      <head>
+        <style>
+          /* Add your custom styles here */
+        </style>
+      </head>
+      <body>
+        <h1>Your bill has arrived!</h1>
+        <p>Name: Daily Tuition</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nodemailer Stack Book</td>
+              <td>A Backend application</td>
+              <td>$10.99</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Looking forward to doing more business</p>
+      </body>
+    </html>
+  `;
 
-    // body of the email
-    var email = {
-        body: {
-            name: firstName,
-            intro: text || 'Welcome to Daily Tuition! We\'re very excited to have you on board.',
-            outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
-        }
-    };
+  let message = {
+    from: process.env.EMAIL,
+    to: userEmail,
+    subject: 'Place Order',
+    html: emailContent,
+  };
 
-    var emailBody = MailGenerator.generate(email);
-
-    let message = {
-        from: process.env.EMAIL,
-        to: userEmail,
-        subject: subject || 'Signup Successful',
-        html: emailBody
-    };
-
-    // send mail
-    transporter.sendMail(message)
-        .then(() => {
-            return res.status(200).send({ msg: 'You should receive an email from us.' });
-        })
-        .catch(error => res.status(500).send({ error }));
+  transporter
+    .sendMail(message)
+    .then(() => {
+      return res.status(201).json({
+        msg: 'You should receive an email',
+      });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error });
+    });
 };
