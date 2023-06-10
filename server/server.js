@@ -19,9 +19,9 @@ app.use(morgan("tiny"))
 
 const port =8080
 
-app.get("/", (req, res) => {
-    res.send("home get request");
-  });
+// app.get("/", (req, res) => {
+//     res.send("home get request");
+//   });
   
   //api routes 
   app.use("/api", router)

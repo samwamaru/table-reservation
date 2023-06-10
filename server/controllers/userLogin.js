@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import otpGenerator from 'otp-generator';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
-
+import { getGoogleOAuthTokens,getGoogleUser,findAndUpdateUser } from "../services/userServices.js";
+import { createSession } from "../services/sessionServices.js";
+import { signJwt } from "../utils/jwt.utils.js";
 dotenv.config();
 
 
@@ -57,28 +59,28 @@ export async function register(req, res) {
   export async function login(req, res) {
     try {
       const { identifier, password } = req.body;
-      console.log('Request Body:', req.body);
+      
 
   
-      console.log('Identifier:', identifier);
+     
   
       // Find user by phone number or email
       const user = await UserModel.findOne({
         $or: [{ mobile: identifier }, { email: identifier }],
       });
   
-      console.log('User:', user);
+      
   
       if (!user) {
-        console.log('User not found');
+        
         return res.status(401).send({ error: "Invalid phone number or email" });
       }
   
       // Compare password
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        console.log('Invalid password');
-        return res.status(401).send({ error: "Invalid phone number or email or password" });
+        
+        return res.status(401).send({ error: "Invalid  password" });
       }
   
       // Generate JWT token
@@ -221,3 +223,82 @@ export async function verifyOTP(req,res){
       return res.status(401).send({ error });
   }
 }
+
+export async function googleOauthHandler(req, res) {
+  // get the code from qs
+  const code = req.query.code;
+
+  try {
+    // get the id and access token with the code
+    const { id_token, access_token } = await getGoogleOAuthTokens({ code });
+    console.log({ id_token, access_token });
+
+    // get user with tokens
+    const googleUser = await getGoogleUser({ id_token, access_token });
+    //jwt.decode(id_token);
+
+    console.log({ googleUser });
+
+    if (!googleUser.verified_email) {
+      return res.status(403).send("Google account is not verified");
+    }
+
+    // upsert the user
+    const user = await findAndUpdateUser(
+      {
+        email: googleUser.email,
+      },
+      {
+        email: googleUser.email,
+        name: googleUser.name,
+        // picture: googleUser.picture,
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+    const accessTokenCookieOptions = {
+      maxAge: 900000, // 15 mins
+      httpOnly: true,
+      domain: "localhost",
+      path: "/",
+      sameSite: "lax",
+      secure: false,
+    };
+    
+    const refreshTokenCookieOptions = {
+      ...accessTokenCookieOptions,
+      maxAge: 3.154e10, // 1 year
+    };
+    
+
+    // create a session
+    const session = await createSession(user._id, req.get("user-agent") || "");
+
+    // create an access token
+    const accessToken = signJwt(
+      { ...user.toJSON(), session: session._id },
+      { expiresIn: process.env.ACCESS_TOKEN_TTL } // 15 minutes
+    );
+
+    // create a refresh token
+    const refreshToken = signJwt(
+      { ...user.toJSON(), session: session._id },
+      { expiresIn: process.env.REFRESH_TOKEN_TTL } // 1 year
+    );
+
+    // set cookies
+    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+
+    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+
+    // redirect back to client
+    res.redirect(process.env.ORIGIN);
+  } catch (error) {
+    console.log(error, "Failed to authorize Google user");
+    return res.redirect(`${process.env.ORIGIN}/oauth/error`);
+  }
+}
+
+

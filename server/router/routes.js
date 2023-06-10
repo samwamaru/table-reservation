@@ -28,7 +28,7 @@ router.route('/table-availability').get(verifyUser,verifyAdmin, reservationcontr
 router.route('/reservations/guest/:id').get(reservationcontroller.getGuestDetails)
 router.route('/my-reservations').get( verifyUser, reservationcontroller.getCustomerReservations)
 router.route("/reservations/report").get(reservationcontroller.getReservationReport)
-
+router.route("/redirect/google").get(controller.googleOauthHandler )
 
 
 //put methods
