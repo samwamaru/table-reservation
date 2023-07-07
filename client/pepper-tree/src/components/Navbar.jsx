@@ -6,7 +6,8 @@ import { FiUser, FiLogOut, FiSettings, FiHome } from 'react-icons/fi';
 import { useLogoutMutation } from '../slices/userApiSlice';
 import { clearCredentials } from '../slices/authSlice';
 import { FiMenu } from 'react-icons/fi';
-
+import { FaUserCircle } from 'react-icons/fa';
+import "../index.css"
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
@@ -49,7 +50,7 @@ const Navbar = () => {
   className="inline-flex items-center justify-center p-2  text-white hover:text-white transition duration-150 ease-in-out"
   aria-expanded={isOpen ? 'true' : 'false'}
 >
-  <FiMenu className="block h-6 w-6  ml-4" />
+  <FaUserCircle className="block h-6 w-6  ml-4" />
 </span>
 
 
@@ -110,20 +111,16 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <div className="ml-4">
-                <Link
-                  to="/login"
-                  className="text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="ml-4 text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Register
-                </Link>
-              </div>
+              <div className="ml-4 flex items-center">
+  <Link
+    to="/login"
+    className="flex items-center text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
+  >
+    <FiUser className="mr-1 text-xl" />
+    <span>Login</span>
+  </Link>
+</div>
+
             )}
           </div>
         </div>
@@ -132,26 +129,47 @@ const Navbar = () => {
       {isOpen && (
         <div className="lg:hidden">
           <div className="px-2 pt-2 pb-3">
-            <Link
-              to="/"
-              className="text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Home
-            </Link>
+          
+            
             {userInfo ? (
               <>
-                <Link
-                  to="/profile"
-                  className="text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Profile
-                </Link>
-                <div
-                  className="text-white block px-3 py-2 text-base rounded-md font-medium"
-                  onClick={logoutHandler}
-                >
-                  Logout
-                </div>
+                  <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="w-full max-w-md bg-white rounded-md shadow-lg mt-0">
+          <div className="px-4 py-2 border-b flex justify-between items-center">
+            <div className="py-10">
+              <h3 className="text-lg font-semibold">My Account</h3>
+              <p className="text-sm text-gray-600">Welcome, {userInfo.name}</p>
+            </div>
+            <div
+              className="text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer bg-gray-100"
+              onClick={handleToggle}
+            >
+              <FiUser />
+            </div>
+          </div>
+          <div className="p-4 mt-6">
+            <h4 className="text-md font-semibold mb-2">My Reservations</h4>
+            {/* Display reservation information */}
+          </div>
+          <div className="p-4">
+            <h4 className="text-md font-semibold mb-2">My Reviews</h4>
+            {/* Display review information */}
+          </div>
+          <div className="p-4">
+            <h4 className="text-md font-semibold mb-2">Loyalty Space</h4>
+            {/* Display loyalty information */}
+          </div>
+          <div className="border-t px-4 py-2">
+            <button
+              className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={logoutHandler}
+            >
+              <FiLogOut className="mr-2" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
               </>
             ) : (
               <>

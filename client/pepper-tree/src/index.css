@@ -250,3 +250,13 @@ button[disabled] {
 .smaller-placeholder::placeholder {
   font-size: 0.75rem; /* Adjust the value as needed */
 }
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Adjust the opacity as needed */
+  backdrop-filter: blur(4px); /* Apply the blur effect */
+  z-index: 9999; /* Ensure the overlay is on top of other components */
+}

@@ -17,7 +17,7 @@ const Home = () => {
       <MenuGallery/>
       <ContactDetails/>
       <LocationMap/>
-      <Footer/>
+      
      
       
     </div>
