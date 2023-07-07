@@ -1,0 +1,89 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  width: 80%;
+  max-width: 600px;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body {
+  /* Add any additional styles for the modal body */
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.reservation-details {
+  position: relative;
+}
+
+.reservation-details-bg {
+  background-image: url(images/dish3.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+}
+
+.user-details {
+  /* Add any additional styles for the user details section */
+}
+
+.form {
+  /* Add any additional styles for the form section */
+}
+
+.communication {
+  /* Add any additional styles for the communication section */
+}
+
+.confirm-button {
+  text-align: center;
+}
+
+.btn-confirm {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add any additional CSS styles as needed */

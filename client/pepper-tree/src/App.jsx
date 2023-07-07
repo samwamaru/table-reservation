@@ -1,11 +1,59 @@
-import React from 'react'
-import Home from './components/Home'
-const App = () => {
-  return (
-    <div className=' '> 
-    <Home/>
-    </div>
-  )
-}
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './components/Home';
+import Register from './components/Register';
+import Login from './components/Login';
+import CreateReservation from './components/CreateReservation';
+import ConfirmReservation from './components/ConfirmReservation';
+import { useEffect } from 'react';
+import { setCredentials } from './slices/authSlice';
+import { setReservationData } from './slices/reservationSlice';
+import { useSelector,useDispatch } from 'react-redux';
+import { useGetUserProfileQuery } from './slices/userApiSlice';
+import Success from './components/Succes';
 
-export default App
+const App = () => {
+const {reservationData} = useSelector((state)=> state.reservation)
+  const { data, isLoading: isUserLoading } = useGetUserProfileQuery();
+
+  let user = null;
+if (data && data.user) {
+  user = data.user;
+}
+const dispatch= useDispatch()
+
+  useEffect(() => {
+    if (user) {
+      // Do something with the loaded user data
+      console.log('googleUser:', user);
+      // Dispatch the setCredentials action to update the user information
+      dispatch(setCredentials(user));
+    }
+  }, [user, dispatch]);
+  return (
+    <div className="">
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reservation" element={<CreateReservation />} />
+          <Route path="/confirm" element={<ConfirmReservation />} />
+
+          <Route path="/success" element={<Success />} />
+         
+          {/* Add more routes as needed */}
+        </Routes>
+        <Footer/>
+      </Router>
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default App;

@@ -26,10 +26,12 @@
 import mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema({
-  mobile: {
-    type: String,
-    required: [true, "Please provide a unique number"],
+
+  name:{
+ type:String,
+ required: true
   },
+  
   password: {
     type: String,
     required: [true, "Please provide a password"],
@@ -39,9 +41,8 @@ export const UserSchema = new mongoose.Schema({
     required: [true, "Please provide a unique email"],
     unique: true,
   },
-  firstName: { type: String },
-  lastName: { type: String },
-  profile: { type: String },
+  
+ 
   role: { 
     type: String,
     default: "user"

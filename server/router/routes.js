@@ -15,6 +15,8 @@ router.route('/registerMail').post(registerMail)
 
 router.route("/authenticate").post()
 router.route("/login").post(controller.login)
+router.route("/logout").post(controller.logoutUser)
+
 router.route("/reservations").post(verifyUser,reservationcontroller.createReservation)
 
 //get methods

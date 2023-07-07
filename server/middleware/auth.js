@@ -1,27 +1,37 @@
-import dotenv from "dotenv"
+
 import UserModel from "../models/User.model.js";
 import  jwt  from "jsonwebtoken";
-
+import asyncHandler from 'express-async-handler';
+import dotenv from "dotenv"
 dotenv.config()
-export function verifyUser(req, res, next) {
-    const token = req.headers.authorization
-  
-    if (!token) {
-      return res.status(401).send({ error: 'Unauthorized: No token provided' });
-    }
-  
+
+  export const  verifyUser = asyncHandler(async(req,res,next)=>{
+
+let token
+  token = req.cookies.jwt;
+
+  if (token) {
     try {
-      const decoded =  jwt.verify(token, process.env.JWT_SECRET);
-  
-      // Attach the decoded user information to the request object
-      req.user = decoded;
-    
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await UserModel.findById(decoded.userId).select('-password');
+
       next();
     } catch (error) {
-      return res.status(401).send({ error: 'Unauthorized: Invalid token' });
+      console.error(error);
+      res.status(401);
+      throw new Error('Not authorized, token failed');
     }
+  } else {
+    res.status(401);
+    throw new Error('Not authorized, no token');
   }
-  
+});
+
+
+
+
+
   
   
 export function localVariables(req, res, next){

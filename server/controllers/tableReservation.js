@@ -117,16 +117,21 @@ export const getReservationById = async (req, res) => {
   // Create a new reservation
   
  
-
   export async function createReservation(req, res) {
     try {
       const { date, time, numberOfGuests, specialRequests, duration } = req.body;
   
-      // Access the user object from the decoded token
-      const userId = req.user.userId;
+      if (!req.user || !req.user._id) {
+        return res.status(401).send({ error: "Unauthorized: User not authenticated" });
+      }
+  
+      const userId = req.user._id;
       const user = await UserModel.findById(userId);
   
-      // Create reservation
+      if (!user) {
+        return res.status(401).send({ error: "Unauthorized: User not found" });
+      }
+  
       const reservation = new ReservationModel({
         user: userId,
         date,
@@ -136,7 +141,6 @@ export const getReservationById = async (req, res) => {
         duration,
       });
   
-      // Save reservation to the database
       await reservation.save();
   
       return res.status(201).send({
@@ -149,8 +153,6 @@ export const getReservationById = async (req, res) => {
     }
   }
   
-
-
  
 
   export const updateReservation = async (req, res) => {
@@ -222,23 +224,23 @@ export const getReservationById = async (req, res) => {
  
 
 
-export const getCustomerReservations = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-
-    // Retrieve reservations for the logged-in user
-    const reservations = await ReservationModel.find({ user: userId });
-
-    return res.status(200).json({
-      message: 'Customer reservations retrieved successfully',
-      reservations,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
+  export const getCustomerReservations = async (req, res) => {
+    try {
+      const userId = req.user._id; // Assuming the user ID is stored in the _id field
+  
+      // Retrieve reservations for the logged-in user
+      const reservations = await ReservationModel.find({ user: userId });
+  
+      return res.status(200).json({
+        message: 'Customer reservations retrieved successfully',
+        reservations,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
   
   // Get a report of all reservations
   export const getReservationReport = async (req, res) => {

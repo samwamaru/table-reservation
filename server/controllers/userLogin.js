@@ -2,10 +2,11 @@ import UserModel from "../models/User.model.js";
 import dotenv from 'dotenv';
 import otpGenerator from 'otp-generator';
 import bcrypt from "bcrypt"
+import asyncHandler from 'express-async-handler';
 import jwt from "jsonwebtoken";
 import { getGoogleOAuthTokens,getGoogleUser,findAndUpdateUser } from "../services/userServices.js";
 import { createSession } from "../services/sessionServices.js";
-import { signJwt } from "../utils/jwt.utils.js";
+
 dotenv.config();
 
 
@@ -14,138 +15,135 @@ dotenv.config();
 
 
 // http://localhost:8080/api/register
-export async function register(req, res) {
-  try {
-    const { mobile, password, profile, email ,firstName,lastName } = req.body;
 
-    // Check existing phone number
-    const existingPhone = await UserModel.findOne({ mobile });
-    if (existingPhone) {
-      return res.status(400).send({ error: "Please use a unique phone number" });
-    }
 
-    // Check existing email
-    const existingEmail = await UserModel.findOne({ email });
-    if (existingEmail) {
-      return res.status(400).send({ error: "Please use a unique email" });
-    }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+export const register = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
 
-    const user = new UserModel({
-      mobile,
-      password: hashedPassword,
-      profile: profile || "",
-      email,
-      firstName,
-      lastName,
+  const userExists = await UserModel.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error('User already exists');
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await UserModel.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  if (user) {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
     });
 
-    // Save user
-    const result = await user.save();
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict', // Prevent CSRF attacks
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days 
+    });
 
-    return res.status(201).send({ msg: "User registered successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send({ error: "Internal server error" });
+    res.status(201).json({
+      _id: user._id,
+      email: user.email,
+      name: user.name
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
   }
-}
+});
+
+
+// @desc    Logout 
 
   // http://localhost:8080/api/login
 
 
 
-  export async function login(req, res) {
-    try {
-      const { identifier, password } = req.body;
-      
 
   
-     
+   export const login = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
   
-      // Find user by phone number or email
-      const user = await UserModel.findOne({
-        $or: [{ mobile: identifier }, { email: identifier }],
-      });
+    const user = await UserModel.findOne({ email });
   
-      
-  
-      if (!user) {
-        
-        return res.status(401).send({ error: "Invalid phone number or email" });
-      }
-  
-      // Compare password
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!passwordMatch) {
-        
-        return res.status(401).send({ error: "Invalid  password" });
-      }
-  
-      // Generate JWT token
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "24h",
+        expiresIn: '30d',
       });
   
-      return res.status(200).send({
-        token,
-        message: "Logged in successfully",
-        user:user.firstName
-        
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict', // Prevent CSRF attacks
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({ error: "Internal server error" });
+  
+    
+    
+
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        msg: "logged in succesfully"
+      });
+    } else {
+      res.status(401);
+      throw new Error('Invalid email or password');
     }
-  }
+  });
   
   // http://localhost:8080/api/user
 
-  export async function getUser(req, res) {
-    try {
-      const userId = req.user.userId;
+  export const getUser= asyncHandler(async(req,res)=> {
+
+    const user = {
+      _id: req.user._id,
+    email: req.user.email,
+      name: req.user.name
+    }
+res.status(200).json({user})
+  })
   
-      const user = await UserModel.findById(userId).select('-password');
+  export const logoutUser = (req, res) => {
+    res.cookie('jwt', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+  };
+ export const updateUser = asyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.user._id);
   
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+  
+      if (req.body.password) {
+        user.password = req.body.password;
       }
   
-      return res.json({ user });
-    } catch (error) {
-      console.error('Error retrieving user:', error);
-      return res.status(500).json({ error: 'Failed to retrieve user' });
+      const updatedUser = await user.save();
+  
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
     }
-  }
+  });
   
-  export const updateUser=  async(req, res)=> {
-    try {
-      const userId = req.user.userId;
-      const { firstName, lastName, email, mobile } = req.body;
-  
-      // Find the user by ID
-      const user = await UserModel.findById(userId);
-  
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      // Update user's information
-      user.firstName = firstName;
-      user.lastName = lastName;
-      user.email = email;
-      user.mobile = mobile;
-  
-      // Save the updated user
-      await user.save();
-  
-      return res.json({ message: 'User updated successfully', user });
-    } catch (error) {
-      console.error('Error updating user:', error);
-      return res.status(500).json({ error: 'Failed to update user' });
-    }
-  }
   
   // http://localhost:8080/api/generate-otp
  
@@ -224,26 +222,36 @@ export async function verifyOTP(req,res){
   }
 }
 
+
+// const accessTokenCookieOptions: CookieOptions = {
+//   maxAge: 900000, // 15 mins
+//   httpOnly: true,
+//   domain: "localhost",
+//   path: "/",
+//   sameSite: "lax",
+//   secure: false,
+// };
+
+// const refreshTokenCookieOptions: CookieOptions = {
+//   ...accessTokenCookieOptions,
+//   maxAge: 3.154e10, // 1 year
+// };
+
+
 export async function googleOauthHandler(req, res) {
-  // get the code from qs
   const code = req.query.code;
 
   try {
-    // get the id and access token with the code
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
     console.log({ id_token, access_token });
 
-    // get user with tokens
     const googleUser = await getGoogleUser({ id_token, access_token });
-    //jwt.decode(id_token);
-
     console.log({ googleUser });
 
     if (!googleUser.verified_email) {
       return res.status(403).send("Google account is not verified");
     }
 
-    // upsert the user
     const user = await findAndUpdateUser(
       {
         email: googleUser.email,
@@ -251,54 +259,43 @@ export async function googleOauthHandler(req, res) {
       {
         email: googleUser.email,
         name: googleUser.name,
-        // picture: googleUser.picture,
       },
       {
         upsert: true,
         new: true,
       }
     );
-    const accessTokenCookieOptions = {
-      maxAge: 900000, // 15 mins
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+console.log("token",token )
+    // Set JWT token as a cookie
+    // res.cookie("jwt", token, {
+    //   maxAge: 900000, // 15 minutes
+    //   httpOnly: true,
+    //   domain: "localhost",
+    //   path: "/",
+    //   sameSite: "lax",
+    //   secure: false,
+    // });
+
+    res.cookie('jwt', token, {
       httpOnly: true,
-      domain: "localhost",
-      path: "/",
-      sameSite: "lax",
-      secure: false,
-    };
-    
-    const refreshTokenCookieOptions = {
-      ...accessTokenCookieOptions,
-      maxAge: 3.154e10, // 1 year
-    };
-    
+      secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
+      sameSite: 'strict', // Prevent CSRF attacks
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+  
 
-    // create a session
-    const session = await createSession(user._id, req.get("user-agent") || "");
+  
 
-    // create an access token
-    const accessToken = signJwt(
-      { ...user.toJSON(), session: session._id },
-      { expiresIn: process.env.ACCESS_TOKEN_TTL } // 15 minutes
-    );
+res.redirect(process.env.ORIGIN);
 
-    // create a refresh token
-    const refreshToken = signJwt(
-      { ...user.toJSON(), session: session._id },
-      { expiresIn: process.env.REFRESH_TOKEN_TTL } // 1 year
-    );
-
-    // set cookies
-    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
-
-    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-
-    // redirect back to client
-    res.redirect(process.env.ORIGIN);
   } catch (error) {
     console.log(error, "Failed to authorize Google user");
     return res.redirect(`${process.env.ORIGIN}/oauth/error`);
   }
 }
-
 

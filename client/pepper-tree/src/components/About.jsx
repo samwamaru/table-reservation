@@ -1,10 +1,18 @@
 import React from 'react';
 
 const About = () => {
+
+  const headingStyle = {
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: '2rem',
+    color: '#941C2F',
+  };
   return (
     <section className="py-12 bg-gray-100">
       <div className="max-w-4xl mx-auto px-2 sm:px-6 lg:px-4">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">About Us</h2>
+        <h2 style={headingStyle}>About Us</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="flex items-center">
             <img
@@ -13,7 +21,7 @@ const About = () => {
               className="rounded-lg w-full h-auto object-cover mx-auto"
             />
           </div>
-          <div>
+          <div className= "mx-auto">
             <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Our Story</h3>
             <p className="mb-4 leading-relaxed text-base sm:text-lg">
               Peppertree is a craft cocktail and global flavours concept that offers exciting food and drinks in a design centric environment. Inspired by culinary traditions from around the world, Peppertree uses the best of local Kenyan ingredients to create a cuisine that is unique, fresh, and indulgent.

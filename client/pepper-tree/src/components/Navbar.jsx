@@ -1,335 +1,179 @@
-// import React, { useState } from 'react';
-
-// const Navbar = () => {
-//   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-//   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
-
-//   const toggleMobileMenu = () => {
-//     setMobileMenuOpen(!isMobileMenuOpen);
-//   };
-
-//   const toggleUserMenu = () => {
-//     setUserMenuOpen(!isUserMenuOpen);
-//   };
-
-//   return (
-//     <nav className="bg-white border-gray-200 dark:bg-gray-900">
-//       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-//         <a href="https://flowbite.com/" className="flex items-center">
-//           <img
-//             src="https://flowbite.com/docs/images/logo.svg"
-//             className="h-8 mr-3"
-//             alt="Flowbite Logo"
-//           />
-//           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-//             Tablemate
-//           </span>
-//         </a>
-//         <div className="flex items-center md:order-2">
-//           <button
-//             type="button"
-//             className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-//             id="user-menu-button"
-//             aria-expanded={isUserMenuOpen}
-//             onClick={toggleUserMenu}
-//             data-dropdown-toggle="user-dropdown"
-//           >
-//             <span className="sr-only">Open user menu</span>
-//             <img
-//               className="w-8 h-8 rounded-full"
-//               src="/docs/images/people/profile-picture-3.jpg"
-//               alt="user photo"
-//             />
-//           </button>
-//           {/* User Menu */}
-//           {isUserMenuOpen && (
-//             <div className="absolute top-14 right-0 bg-white border border-gray-200 dark:bg-gray-900">
-//               <div className="px-4 py-3">
-//                 <span className="block text-sm text-gray-900 dark:text-white">
-//                   Bonnie Green
-//                 </span>
-//                 <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-//                   name@flowbite.com
-//                 </span>
-//               </div>
-//               <ul className="py-2" aria-labelledby="user-menu-button">
-//                 <li>
-//                   <a
-//                     href="#"
-//                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-//                   >
-//                     Dashboard
-//                   </a>
-//                 </li>
-//                 <li>
-//                   <a
-//                     href="#"
-//                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-//                   >
-//                     Settings
-//                   </a>
-//                 </li>
-//                 <li>
-//                   <a
-//                     href="#"
-//                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-//                   >
-//                     Earnings
-//                   </a>
-//                 </li>
-//                 <li>
-//                   <a
-//                     href="#"
-//                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-//                   >
-//                     Sign out
-//                   </a>
-//                 </li>
-//               </ul>
-//             </div>
-//           )}
-//           <button
-//             data-collapse-toggle="mobile-menu-2"
-//             type="button"
-//             className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-//             aria-controls="mobile-menu-2"
-//             aria-expanded={isMobileMenuOpen}
-//             onClick={toggleMobileMenu}
-//           >
-//             <span className="sr-only">Open main menu</span>
-//             <svg
-//               className="w-6 h-6"
-//               aria-hidden="true"
-//               fill="currentColor"
-//               viewBox="0 0 20 20"
-//               xmlns="http://www.w3.org/2000/svg"
-//             >
-//               <path
-//                 fillRule="evenodd"
-//                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-//                 clipRule="evenodd"
-//               ></path>
-//             </svg>
-//           </button>
-//         </div>
-//         <div
-//           className={`${
-//             isMobileMenuOpen ? 'block' : 'hidden'
-//           } items-center justify-between w-full md:flex md:w-auto md:order-1`}
-//           id="mobile-menu-2"
-//         >
-//           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-//             <li>
-//               <a
-//                 href="#"
-//                 className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-//                 aria-current="page"
-//               >
-//                 Home
-//               </a>
-//             </li>
-//             <li>
-//               <a
-//                 href="#"
-//                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-//               >
-//                 About
-//               </a>
-//             </li>
-//             <li>
-//               <a
-//                 href="#"
-//                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-//               >
-//                 Menu
-//               </a>
-//             </li>
-//             <li>
-//               <a
-//                 href="#"
-//                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-//               >
-//                 Reserve table
-//               </a>
-//             </li>
-//             <li>
-//               <a
-//                 href="#"
-//                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-//               >
-//                 Contact
-//               </a>
-//             </li>
-//           </ul>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useGetUserProfileQuery } from '../slices/userApiSlice';
+import { FiUser, FiLogOut, FiSettings, FiHome } from 'react-icons/fi';
+import { useLogoutMutation } from '../slices/userApiSlice';
+import { clearCredentials } from '../slices/authSlice';
+import { FiMenu } from 'react-icons/fi';
 
 const Navbar = () => {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
+  const [logout] = useLogoutMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
   };
 
-  const toggleUserMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
+  const logoutHandler = async () => {
+    try {
+      await logout().unwrap();
+      dispatch(clearCredentials());
+      localStorage.removeItem('userInfo');
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 relative z-50">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" className="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8 mr-3"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Tablemate
-          </span>
-        </a>
-        <div className="flex items-center md:order-2">
-          <button
-            type="button"
-            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            id="user-menu-button"
-            aria-expanded={isUserMenuOpen}
-            onClick={toggleUserMenu}
-            data-dropdown-toggle="user-dropdown"
-          >
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="/docs/images/people/profile-picture-3.jpg"
-              alt="user photo"
-            />
-          </button>
-          {/* User Menu */}
-          {isUserMenuOpen && (
-            <div className="absolute top-14 right-0 bg-white border border-gray-200 dark:bg-gray-900 z-50">
-              <div className="px-4 py-3">
-                <span className="block text-sm text-gray-900 dark:text-white">
-                  Bonnie Green
-                </span>
-                <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                  name@flowbite.com
-                </span>
-              </div>
-              <ul className="py-2" aria-labelledby="user-menu-button">
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Earnings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div>
-          )}
-          <button
-            data-collapse-toggle="mobile-menu-2"
-            type="button"
-            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="mobile-menu-2"
-            aria-expanded={isMobileMenuOpen}
-            onClick={toggleMobileMenu}
-          >
-            <span className="sr-only">Open main menu</span>
-            <svg
-              className="w-6 h-6"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-        </div>
-        <div
-          className={`${
-            isMobileMenuOpen ? 'block' : 'hidden'
-          } items-center justify-between w-full md:flex md:w-auto md:order-1`}
-          id="mobile-menu-2"
-        >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                aria-current="page"
+    <nav className="bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex-shrink-0 flex items-center">
+            <span className="text-xl font-bold text-white logo">Logo</span>
+            <span className="hidden lg:inline-block text-lg ml-2 text-white company-name">Company Name</span>
+          </div>
+          <div className="-mr-2 flex items-center lg:hidden">
+       
+
+
+
+          <span
+  onClick={handleToggle}
+  className="inline-flex items-center justify-center p-2  text-white hover:text-white transition duration-150 ease-in-out"
+  aria-expanded={isOpen ? 'true' : 'false'}
+>
+  <FiMenu className="block h-6 w-6  ml-4" />
+</span>
+
+
+          </div>
+          <div className="hidden lg:flex lg:items-center">
+            <div className="flex-shrink-0">
+              <Link
+                to="/"
+                className="text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                About
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Menu
-              </a>
-            </li>
-           
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Contact
-              </a>
-            </li>
-          </ul>
+              </Link>
+            </div>
+            {userInfo ? (
+              <div className="ml-4 relative flex-shrink-0 z-50">
+                <button
+                  className="flex text-white items-center hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium focus:outline-none border-none"
+                  onClick={handleToggle}
+                  aria-expanded={isOpen ? 'true' : 'false'}
+                >
+                  <FiUser className="" />
+                  <span className="ml-1">{userInfo.name}</span>
+                  <svg
+                    className="ml-1 h-5 w-5 transform -rotate-90 transition duration-150 ease-in-out"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.293 6.293a1 1 0 011.414 0L10 8.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                {isOpen && (
+                  <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-lg z-50 user-dropdown">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FiSettings className="mr-2" />
+                      Profile
+                    </Link>
+                    <button
+                      className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FiLogOut className="mr-2" />
+                      Dashboard
+                    </button>
+                    <button
+                      className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={logoutHandler}
+                    >
+                      <FiLogOut className="mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="ml-4">
+                <Link
+                  to="/login"
+                  className="text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="ml-4 text-white hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {isOpen && (
+        <div className="lg:hidden">
+          <div className="px-2 pt-2 pb-3">
+            <Link
+              to="/"
+              className="text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Home
+            </Link>
+            {userInfo ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Profile
+                </Link>
+                <div
+                  className="text-white block px-3 py-2 text-base rounded-md font-medium"
+                  onClick={logoutHandler}
+                >
+                  Logout
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
 
 export default Navbar;
-
