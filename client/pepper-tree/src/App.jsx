@@ -14,6 +14,7 @@ import { setCredentials } from './slices/authSlice';
 import { setReservationData } from './slices/reservationSlice';
 import { useSelector,useDispatch } from 'react-redux';
 import { useGetUserProfileQuery } from './slices/userApiSlice';
+import MyReservations from './components/reservations/MyReservations';
 import Success from './components/Succes';
 
 const App = () => {
@@ -44,6 +45,7 @@ const dispatch= useDispatch()
           <Route path="/login" element={<Login />} />
           <Route path="/reservation" element={<CreateReservation />} />
           <Route path="/confirm" element={<ConfirmReservation />} />
+          <Route path="/user/reservations-dashboard" element={<MyReservations />} />
 
           <Route path="/success" element={<Success />} />
          

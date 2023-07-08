@@ -66,7 +66,7 @@ const Navbar = () => {
             </div>
             {userInfo ? (
               <div className="ml-4 relative flex-shrink-0 z-50">
-                <button
+                <div
                   className="flex text-white items-center hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium focus:outline-none border-none"
                   onClick={handleToggle}
                   aria-expanded={isOpen ? 'true' : 'false'}
@@ -84,30 +84,35 @@ const Navbar = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </button>
+                </div>
                 {isOpen && (
-                  <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-lg z-50 user-dropdown">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <FiSettings className="mr-2" />
-                      Profile
-                    </Link>
-                    <button
-                      className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <FiLogOut className="mr-2" />
-                      Dashboard
-                    </button>
-                    <button
-                      className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={logoutHandler}
-                    >
-                      <FiLogOut className="mr-2" />
-                      Logout
-                    </button>
+                  <div className="absolute right-0 mt-2 py-2 px-4 w-64 bg-white rounded-md shadow-lg z-50 user-dropdown">
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-600">Welcome, {userInfo.name}!</p>
                   </div>
+                  <Link
+                    to="/account"
+                    className="block py-6 text-sm text-gray-700 "
+                  >
+                   
+                   <p className='text'>My Account</p> 
+                  </Link>
+                  <hr></hr>
+                  <div
+                    className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                   
+                    My Reservations
+                  </div>
+                  <div
+                    className="w-full text-left items-center flex py-4 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={logoutHandler}
+                  >
+                    <FiLogOut className="mr-2" />
+                    Sign out
+                  </div>
+                </div>
+                
                 )}
               </div>
             ) : (
@@ -147,10 +152,12 @@ const Navbar = () => {
               <FiUser />
             </div>
           </div>
+          <Link to = "/user/reservations-dashboard">
           <div className="p-4 mt-6">
             <h4 className="text-md font-semibold mb-2">My Reservations</h4>
             {/* Display reservation information */}
           </div>
+          </Link>
           <div className="p-4">
             <h4 className="text-md font-semibold mb-2">My Reviews</h4>
             {/* Display review information */}
@@ -159,14 +166,16 @@ const Navbar = () => {
             <h4 className="text-md font-semibold mb-2">Loyalty Space</h4>
             {/* Display loyalty information */}
           </div>
-          <div className="border-t px-4 py-2">
-            <button
-              className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={logoutHandler}
-            >
-              <FiLogOut className="mr-2" />
-              Logout
-            </button>
+          <div 
+          
+          className="border-t px-4 py-2 flex  items-center"
+          onClick={logoutHandler}
+          >
+            
+          
+            
+            <FiLogOut className=" flex " />
+            <h4 className="text-md font-semibold mb-2 text-red-900 ml-4 flex ">Sign out</h4>
           </div>
         </div>
       </div>
