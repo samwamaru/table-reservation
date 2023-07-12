@@ -12,20 +12,20 @@ import ConfirmReservation from './components/ConfirmReservation';
 import { useEffect } from 'react';
 import { setCredentials } from './slices/authSlice';
 import { setReservationData } from './slices/reservationSlice';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserProfileQuery } from './slices/userApiSlice';
 import MyReservations from './components/reservations/MyReservations';
 import Success from './components/Succes';
 
 const App = () => {
-const {reservationData} = useSelector((state)=> state.reservation)
+  const { reservationData } = useSelector((state) => state.reservation);
   const { data, isLoading: isUserLoading } = useGetUserProfileQuery();
 
   let user = null;
-if (data && data.user) {
-  user = data.user;
-}
-const dispatch= useDispatch()
+  if (data && data.user) {
+    user = data.user;
+  }
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user) {
@@ -35,23 +35,24 @@ const dispatch= useDispatch()
       dispatch(setCredentials(user));
     }
   }, [user, dispatch]);
+
   return (
-    <div className="">
+    <div className="flex flex-col min-h-screen">
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/reservation" element={<CreateReservation />} />
-          <Route path="/confirm" element={<ConfirmReservation />} />
-          <Route path="/user/reservations-dashboard" element={<MyReservations />} />
-
-          <Route path="/success" element={<Success />} />
-         
-          {/* Add more routes as needed */}
-        </Routes>
-        <Footer/>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/reservation" element={<CreateReservation />} />
+            <Route path="/confirm" element={<ConfirmReservation />} />
+            <Route path="/user/reservations-dashboard" element={<MyReservations />} />
+            <Route path="/success" element={<Success />} />
+            {/* Add more routes as needed */}
+          </Routes>
+        </div>
+        <Footer />
       </Router>
       <ToastContainer />
     </div>

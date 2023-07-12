@@ -52,7 +52,10 @@ export const register = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: user._id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      createdAt:user.createdAt
+      
+
     });
   } else {
     res.status(400);
@@ -93,6 +96,7 @@ export const register = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        createdAt: user.createdAt,
         msg: "logged in succesfully"
       });
     } else {
@@ -108,7 +112,8 @@ export const register = asyncHandler(async (req, res) => {
     const user = {
       _id: req.user._id,
     email: req.user.email,
-      name: req.user.name
+      name: req.user.name,
+      createdAt: req.user.createdAt
     }
 res.status(200).json({user})
   })
