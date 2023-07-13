@@ -11,15 +11,16 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(
-  cors({
-    origin: 'https://table-mate.onrender.com/',
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'https://table-mate.onrender.com/',
+//     credentials: true,
+//   })
+// );
 app.use(cookieParser())
 // API routes
 app.use("/api", router);
+
 
 
 app.use(morgan("tiny"));
