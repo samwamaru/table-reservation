@@ -87,36 +87,37 @@ const Navbar = () => {
                   </svg>
                 </div>
                 {isOpen && (
-                  <div className="absolute right-0 mt-2 py-2 px-4 w-64 bg-white rounded-md shadow-lg z-50 user-dropdown">
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-600">Welcome, {userInfo.name}!</p>
-                  </div>
-                  <Link
-                    to="/account"
-                    className="block py-6 text-sm text-gray-700 "
-                  >
-                   
-                   <p className='text'>My Account</p> 
-                  </Link>
-                  <hr></hr>
-                  <Link to = "/user/reservations-dashboard">
-                  <div
-                    className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                   
-                    My Reservations
-                  </div>
-                  </Link>
-                  <div
-                    className="w-full text-left items-center flex py-4 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={logoutHandler}
-                  >
-                    <FiLogOut className="mr-2" />
-                    Sign out
-                  </div>
-                </div>
-                
-                )}
+  <div className="absolute right-0 mt-2 py-2 px-4 w-64 bg-white rounded-md shadow-lg z-50 user-dropdown">
+    <div className="mb-4">
+      <p className="text-sm text-gray-600">Welcome, {userInfo.name}!</p>
+    </div>
+    <Link to="/account" className="block py-6 text-sm text-gray-700">
+      <p className="text">My Account</p>
+    </Link>
+    <hr></hr>
+    {userInfo.role === 'admin' && (
+      // Render the dashboard link only if the user role is "admin"
+      <Link to="/admin/dashboard">
+        <div className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100">
+          Dashboard
+        </div>
+      </Link>
+    )}
+    <Link to="/user/reservations-dashboard">
+      <div className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100">
+        My Reservations
+      </div>
+    </Link>
+    <div
+      className="w-full text-left items-center flex py-4 text-sm text-gray-700 hover:bg-gray-100"
+      onClick={logoutHandler}
+    >
+      <FiLogOut className="mr-2" />
+      Sign out
+    </div>
+  </div>
+)}
+
               </div>
             ) : (
               <div className="ml-4 flex items-center">
@@ -161,6 +162,16 @@ const Navbar = () => {
             {/* Display reservation information */}
           </div>
           </Link>
+          {userInfo.role==="admin" && (
+            <Link to = "/dashboard">
+  <div className="p-4">
+  <h4 className="text-md font-semibold mb-2">Dashboard</h4>
+  {/* Display review information */}
+</div>
+</Link>
+          )
+          
+          }
           <div className="p-4">
             <h4 className="text-md font-semibold mb-2">My Reviews</h4>
             {/* Display review information */}

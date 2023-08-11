@@ -11,14 +11,17 @@ import CreateReservation from './components/CreateReservation';
 import ConfirmReservation from './components/ConfirmReservation';
 import { useEffect } from 'react';
 import { setCredentials } from './slices/authSlice';
-import { setReservationData } from './slices/reservationSlice';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserProfileQuery } from './slices/userApiSlice';
 import MyReservations from './components/reservations/MyReservations';
+
 import Success from './components/Succes';
+import FeedBack from './components/FeedBack';
+
 
 const App = () => {
-  const { reservationData } = useSelector((state) => state.reservation);
+ 
   const { data, isLoading: isUserLoading } = useGetUserProfileQuery();
 
   let user = null;
@@ -48,7 +51,9 @@ const App = () => {
             <Route path="/reservation" element={<CreateReservation />} />
             <Route path="/confirm" element={<ConfirmReservation />} />
             <Route path="/user/reservations-dashboard" element={<MyReservations />} />
+            <Route path="/feedback" element={<FeedBack />} />
             <Route path="/success" element={<Success />} />
+            <Route path="/dashboard" element={<Success />} />
             {/* Add more routes as needed */}
           </Routes>
         </div>

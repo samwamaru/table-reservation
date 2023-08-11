@@ -18,7 +18,7 @@ const MyReservations = () => {
   };
 
   const upcomingReservations = reservations?.filter(
-    (reservation) => reservation.status !== 'cancelled'
+    (reservation) => reservation.status === 'confirmed'
   );
   const pastReservations = reservations?.filter(
     (reservation) => reservation.status === 'cancelled'
@@ -146,20 +146,23 @@ const MyReservations = () => {
           <h1>{restaurantName}</h1>
 
           {/* Reservation Status */}
-          {reservation.status === 'completed' ? (
+          {reservation.status === 'confirmed' ? (
       
 
 
-<div className="flex items-center text-green-500">
-  <div className="bg-green-500 text-white py-1 px-2 rounded-full">
-    <TiTick className="h-5 w-5" />
-  </div>
- <p className='text-gray-900 mx-2'>Reservation confirmed</p> 
+<div className="flex ">
+
+  
+ 
+ <p className='text-white bg-green-300 px-2 md:mx-2'>confirmed</p> 
 </div>
 
         
           ) : (
-            <div className=" text-red-400 py-1 px-2 rounded">Canceled</div>
+            <div className="flex items-center ">
+            <p className='text-white bg-red-300 px-2 md:mx-2'>canceled</p> 
+            </div>
+
           )}
 
           {/* Date and Time */}
