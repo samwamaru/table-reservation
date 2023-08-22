@@ -114,7 +114,7 @@ const Register = () => {
           <span className='text-tale-300'>Log in now</span>
         </Link>
       </p>
-      <div className="flex items-center justify-center mb-4">
+      {/* <div className="flex items-center justify-center mb-4">
   <button
     className="flex items-center text-gray-900 font-bold py-2 px-4 rounded space-x-2 sm:text-lg sm:py-3 sm:px-6"
     onClick={handleGoogleLogin}
@@ -122,7 +122,7 @@ const Register = () => {
     <FcGoogle className="mr-6 bg bg-white text-xl" />
     <span className="ml-2 px-4">Google</span>
   </button>
-</div>
+</div> */}
 
         <div className="flex items-center justify-center mb-4">
   <hr className="w-1/4 border-gray-300 my-0" />

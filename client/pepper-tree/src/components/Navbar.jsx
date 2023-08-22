@@ -38,8 +38,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
-            <span className="text-xl font-bold text-white logo">Logo</span>
-            <span className="hidden lg:inline-block text-lg ml-2 text-white company-name">Company Name</span>
+            {/* <span className="text-xl font-bold text-white logo">Logo</span> */}
+            <span className="hidden lg:inline-block text-lg ml-2 text-white company-name">Table Mate</span>
           </div>
           <div className="-mr-2 flex items-center lg:hidden">
        

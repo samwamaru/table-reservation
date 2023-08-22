@@ -32,7 +32,7 @@ const FeedBack = () => {
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2cd">
       <h2 className="text-lg font-semibold mb-2">Booking Experience Feedback</h2>
       <p className="mb-4 text-gray-600">
         Please provide your feedback on the booking experience. Your insights will help us improve our reservation process.

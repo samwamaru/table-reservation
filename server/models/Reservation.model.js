@@ -26,7 +26,7 @@ const ReservationSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["confirmed", "pending", "canceled", "completed"],
-    default: "pending",
+    default: "confirmed",
   },
   assignedTable: {
     type: mongoose.Schema.Types.ObjectId,

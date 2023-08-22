@@ -11,13 +11,21 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173/", 
+//     "https://table-mate.onrender.com"],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: ["http://localhost:5173/", 
-    "https://table-mate.onrender.com"],
-    credentials: true,
+    origin: "http://localhost:5173",
+    credentials: true
   })
-);
+)
+
 
 app.use(cookieParser())
 // API routes

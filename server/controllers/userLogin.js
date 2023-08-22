@@ -113,7 +113,8 @@ export const register = asyncHandler(async (req, res) => {
       _id: req.user._id,
     email: req.user.email,
       name: req.user.name,
-      createdAt: req.user.createdAt
+      createdAt: req.user.createdAt,
+      role:req.user.role
     }
 res.status(200).json({user})
   })

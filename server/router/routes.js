@@ -32,6 +32,8 @@ router.route('/my-reservations').get( verifyUser, reservationcontroller.getCusto
 router.route("/reservations/report").get(reservationcontroller.getReservationReport)
 router.route("/redirect/google").get(controller.googleOauthHandler )
 
+// jeyse1@gmail.com
+// Jesse@123
 
 //put methods
 router.route("/updateuser").put(verifyUser, controller.updateUser)

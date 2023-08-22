@@ -43,7 +43,7 @@ async function getGoogleUser({ id_token, access_token }) {
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
       {
         headers: {
-          Authorization: `${id_token}`,
+          Authorization: `${id_token} `,
         },
       }
     );

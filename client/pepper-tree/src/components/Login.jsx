@@ -62,7 +62,7 @@ const Login = () => {
           <span className='text-tale-300'>Sign up</span>
         </Link>
       </p>
-      <div className="flex items-center justify-center mb-4">
+      {/* <div className="flex items-center justify-center mb-4">
   <button
     className="flex items-center text-gray-900 font-bold py-2 px-4 rounded space-x-2 sm:text-lg sm:py-3 sm:px-6"
     onClick={handleGoogleLogin}
@@ -70,7 +70,7 @@ const Login = () => {
     <FcGoogle className="mr-6 bg bg-white text-xl" />
     <span className="ml-2 px-4">Google</span>
   </button>
-</div>
+</div> */}
         <div className="flex items-center justify-center my-4">
           <hr className="border-gray-300 border-1 w-2/5" />
           <p className="mx-4 text-sm">or </p>

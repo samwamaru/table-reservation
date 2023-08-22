@@ -15,15 +15,20 @@ export const verifyUser = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error('Not authorized, token failed');
+      if (error instanceof jwt.TokenExpiredError) {
+        // If the token has expired, you can send a user-friendly response.
+        res.status(401).json({ error: 'Your session has expired. Please log in again.' });
+      } else {
+        // For other JWT verification errors, you can return a generic error message.
+        console.error(error);
+        res.status(401).json({ error: 'Not authorized, token failed' });
+      }
     }
   } else {
-    res.status(401);
-    throw new Error('Not authorized, no token');
+    res.status(401).json({ error: 'Not authorized, no token' });
   }
 });
+
 
 export const verifyAdmin = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
