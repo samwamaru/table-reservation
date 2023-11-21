@@ -5,42 +5,30 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 const MenuGallery = () => {
   const menuItems = [
     {
-      src: '/images/food-1.jpg',
+      src: '/images/gall1.jpg',
       alt: 'Menu Item 1',
       downloadUrl: '/images/food-1.jpg',
     },
     {
-      src: '/images/food-2.jpg',
-      alt: 'Menu Item 2',
-      downloadUrl: '/images/food-3.jpg',
+      src: '/images/gall2.jpg',
+      alt: 'Menu Item 1',
+      downloadUrl: '/images/food-1.jpg',
     },
     {
-      src: '/images/food-3.jpg',
-      alt: 'Menu Item 2',
-      downloadUrl: '/images/food-3.jpg',
+      src: '/images/record.jpg',
+      alt: 'Menu Item 1',
+      downloadUrl: '/images/food-1.jpg',
     },
-    {
-      src: '/images/drink-1.jpg',
-      alt: 'Menu Item 2',
-      downloadUrl: '/images/food-3.jpg',
-    },
-    {
-      src: '/images/drink-2.jpg',
-      alt: 'Menu Item 2',
-      downloadUrl: '/images/food-3.jpg',
-    },
-    {
-      src: '/images/drink-3.jpg',
-      alt: 'Menu Item 3',
-      downloadUrl: '/images/drink-1.jpg',
-    },
+    
+  
+    
     // Add more menu items here
   ];
 
   return (
     <div className="py-12 bg-gray-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">Menu Gallery</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">Gallery</h2>
         <Carousel
           showThumbs={false}
           showStatus={false}

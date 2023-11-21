@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const UserSchema = new mongoose.Schema({
+const DoctorSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -16,7 +16,11 @@ export const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "user",
+    default: "doctor", // Set role as "doctor" for doctors
+  },
+  specialty: {
+    type: String,
+    required: true, // You can add specific fields like specialty for doctors
   },
   createdAt: {
     type: Date,
@@ -24,4 +28,6 @@ export const UserSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("User", UserSchema);
+const Doctor = mongoose.model("Doctor", DoctorSchema);
+
+export default Doctor;

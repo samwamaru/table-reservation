@@ -4,20 +4,14 @@ import morgan from "morgan";
 import connectDatabase from "./database/connect.js";
 import router from "./router/routes.js";
 import cron from 'node-cron';
-import { updateTableAvailability } from "./updateTableAvailability.js";
+
 import { notFound,errorHandler } from "./errorHandler/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 const app = express();
 
 // Middleware
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: ["http://localhost:5173/", 
-//     "https://table-mate.onrender.com"],
-//     credentials: true,
-//   })
-// );
+
 
 app.use(
   cors({
@@ -53,4 +47,4 @@ try {
   console.log("Cannot connect to the server");
 }
 
-cron.schedule('* * * * *', updateTableAvailability);
+// cron.schedule('* * * * *', updateTableAvailability);

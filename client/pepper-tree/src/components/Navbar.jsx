@@ -12,7 +12,7 @@ import "../index.css"
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
-
+console.log(userInfo)
   const [logout] = useLogoutMutation();
 
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
             {/* <span className="text-xl font-bold text-white logo">Logo</span> */}
-            <span className="hidden lg:inline-block text-lg ml-2 text-white company-name">Table Mate</span>
+            <span className="hidden lg:inline-block text-lg ml-2 text-white company-name">Tophill</span>
           </div>
           <div className="-mr-2 flex items-center lg:hidden">
        
@@ -89,25 +89,29 @@ const Navbar = () => {
                 {isOpen && (
   <div className="absolute right-0 mt-2 py-2 px-4 w-64 bg-white rounded-md shadow-lg z-50 user-dropdown">
     <div className="mb-4">
-      <p className="text-sm text-gray-600">Welcome, {userInfo.name}!</p>
+      <p className="text-sm text-gray-600">Welcome, {userInfo.name},<br></br>  Your medical Id is {userInfo._id} </p>
     </div>
     <Link to="/account" className="block py-6 text-sm text-gray-700">
       <p className="text">My Account</p>
     </Link>
     <hr></hr>
-    {userInfo.role === 'admin' && (
+    <p>{}</p>
+    {userInfo.role === 'doctor' && (
       // Render the dashboard link only if the user role is "admin"
-      <Link to="/admin/dashboard">
+      <>
+      <Link to="/doctor/create-record">
         <div className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100">
-          Dashboard
+          Create record
         </div>
       </Link>
+      <Link to="/admin/dashboard">
+        <div className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100">
+          View Appointments
+        </div>
+      </Link>
+      </>
     )}
-    <Link to="/user/reservations-dashboard">
-      <div className="w-full text-left block py-4 text-sm text-gray-700 hover:bg-gray-100">
-        My Reservations
-      </div>
-    </Link>
+    
     <div
       className="w-full text-left items-center flex py-4 text-sm text-gray-700 hover:bg-gray-100"
       onClick={logoutHandler}

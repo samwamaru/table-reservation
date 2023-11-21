@@ -8,7 +8,8 @@ import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import CreateReservation from './components/CreateReservation';
-import ConfirmReservation from './components/ConfirmReservation';
+import MedicalRecordForm from './components/MedicalRecordForm';
+
 import { useEffect } from 'react';
 import { setCredentials } from './slices/authSlice';
 
@@ -49,11 +50,12 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reservation" element={<CreateReservation />} />
-            <Route path="/confirm" element={<ConfirmReservation />} />
+            
             <Route path="/user/reservations-dashboard" element={<MyReservations />} />
             <Route path="/feedback" element={<FeedBack />} />
             <Route path="/success" element={<Success />} />
             <Route path="/dashboard" element={<Success />} />
+            <Route path="/doctor/create-record" element={<MedicalRecordForm />} />
             {/* Add more routes as needed */}
           </Routes>
         </div>
