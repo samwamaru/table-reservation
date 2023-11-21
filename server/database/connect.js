@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const connectDatabase = async () => {
   try {
-    await mongoose.connect("mongodb+srv://bett:19990303je@cluster0.okpp7ux.mongodb.net/ehr?retryWrites=true&w=majority", {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });

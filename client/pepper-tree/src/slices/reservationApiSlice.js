@@ -4,19 +4,11 @@ export const reservationApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Existing endpoints...
 
-    createAppointment: builder.mutation({
+    createReservation: builder.mutation({
       query: (data) => ({
-        url: "/api/create/appointment",
+        url: "/api/reservations",
         method: 'POST',
         body: data,
-        credentials: 'include',
-      }),
-    }),
-    createMedicalRecord: builder.mutation({
-      query: (data) => ({
-        url: "/api/new/medicalrecord",
-        method: 'POST',  
-        body: data,  
         credentials: 'include',
       }),
     }),
@@ -34,7 +26,7 @@ export const reservationApiSlice = apiSlice.injectEndpoints({
 export const {
   
   
-useCreateMedicalRecordMutation,
-  useCreateAppointmentMutation,
+
+  useCreateReservationMutation,
   useGetMyReservationsQuery,
 } = reservationApiSlice;
