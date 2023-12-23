@@ -23,7 +23,7 @@ npm install
 ### Environment Variables
 
 ```js
-MONGODB_URL=
+MONGO_URL=
 JWT_SECRET=
 ```
 
