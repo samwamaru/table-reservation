@@ -32,7 +32,7 @@ const Footer = () => {
         </a>
       </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 text-center text-white">
-        &copy; PepperTree 2023. All rights reserved.
+        &copy; PepperTree 2024. All rights reserved.
       </div>
     </footer>
   );
