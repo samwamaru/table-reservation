@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const connectDatabase = async () => {
   try {
-    await mongoose.connect("mongodb+srv://sammwangi268:<password>@sammwangi.mim4quv.mongodb.net/?retryWrites=true&w=majority&appName=sammwangi" {
+    await mongoose.connect("mongodb+srv://sammwangi268:<H9KfRTEUGlmvnfEO>@sammwangi.mim4quv.mongodb.net/?retryWrites=true&w=majority&appName=sammwangi" {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
